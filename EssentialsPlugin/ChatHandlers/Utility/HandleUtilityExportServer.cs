@@ -15,6 +15,7 @@ using Microsoft.Xml.Serialization.GeneratedAssembly;
 
 using VRageMath;
 using VRage.Common.Utils;
+using VRage.Library.Utils;
 
 using SEModAPIInternal.API.Entity;
 using SEModAPIInternal.API.Entity.Sector.SectorObject;
