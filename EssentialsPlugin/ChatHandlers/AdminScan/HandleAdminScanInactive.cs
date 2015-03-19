@@ -1,22 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Threading;
-
 using EssentialsPlugin.Utility;
 
 using Sandbox.ModAPI;
 using Sandbox.Common.ObjectBuilders;
-
-using VRageMath;
-
-using SEModAPIInternal.API.Entity;
 using SEModAPIInternal.API.Entity.Sector.SectorObject;
-using SEModAPIInternal.API.Entity.Sector.SectorObject.CubeGrid;
-using SEModAPIInternal.API.Entity.Sector.SectorObject.CubeGrid.CubeBlock;
-
 using SEModAPIInternal.API.Common;
 
 namespace EssentialsPlugin.ChatHandlers
@@ -43,12 +32,13 @@ namespace EssentialsPlugin.ChatHandlers
 		}
 
 		// admin nobeacon scan
-		public override bool HandleCommand(ulong userId, string[] words)
+		public override bool HandleCommand( ulong userId, string command )
 		{
-			if(words.Count() > 3)
+			string[ ] words = command.Split( ' ' );
+			if ( words.Count( ) > 3 )
 				return false;
 
-			if(words.Count() == 0)
+			if(!words.Any())
 			{
 				Communication.SendPrivateInformation(userId, GetHelp());
 				return true;
@@ -65,7 +55,7 @@ namespace EssentialsPlugin.ChatHandlers
 			bool removeNoLoginInformation = true;
 			bool removeOwnerless = true;
 
-			if(words.Count() > 1)
+			if(words.Any())
 			{
 				foreach(string word in words)
 				{

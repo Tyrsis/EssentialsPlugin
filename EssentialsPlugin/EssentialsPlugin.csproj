@@ -33,6 +33,22 @@
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <OutputPath>bin\x64\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <OutputPath>bin\x64\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
   <ItemGroup>
     <Compile Include="AssemblyFileVersion.cs">
       <AutoGen>True</AutoGen>
@@ -154,6 +170,8 @@
     <Compile Include="UtilityClasses\SerializeableDictionary.cs" />
     <Compile Include="UtilityClasses\UIEditors.cs" />
     <Compile Include="Utility\Backup.cs" />
+    <Compile Include="Utility\Docking.cs" />
+    <Compile Include="Utility\DockingItem.cs" />
     <Compile Include="Utility\TimedEntityCleanup.cs" />
     <Compile Include="Utility\Communication.cs" />
     <Compile Include="Utility\CubeGrid.cs" />
@@ -172,41 +190,41 @@
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>AssemblyFileVersion.cs</LastGenOutput>
     </None>
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="HavokWrapper, Version=1.0.5420.29471, Culture=neutral, processorArchitecture=AMD64">
+    <Reference Include="NLog, Version=3.2.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\Applications\Steam\SteamApps\common\SpaceEngineers\DedicatedServer64\HavokWrapper.dll</HintPath>
+      <HintPath>..\packages\NLog.3.2.0.0\lib\net45\NLog.dll</HintPath>
     </Reference>
     <Reference Include="Sandbox.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\Applications\Steam\SteamApps\common\SpaceEngineers\DedicatedServer64\Sandbox.Common.dll</HintPath>
+      <HintPath>..\..\SE-Community-Mod-API\GameLibraries\Sandbox.Common.dll</HintPath>
     </Reference>
     <Reference Include="Sandbox.Common.XmlSerializers, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\Applications\Steam\SteamApps\common\SpaceEngineers\DedicatedServer64\Sandbox.Common.XmlSerializers.dll</HintPath>
+      <HintPath>..\..\SE-Community-Mod-API\GameLibraries\Sandbox.Common.XmlSerializers.dll</HintPath>
     </Reference>
     <Reference Include="Sandbox.Game, Version=0.1.5424.28268, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\Applications\Steam\SteamApps\common\SpaceEngineers\DedicatedServer64\Sandbox.Game.dll</HintPath>
+      <HintPath>..\..\SE-Community-Mod-API\GameLibraries\Sandbox.Game.dll</HintPath>
     </Reference>
-    <Reference Include="SEModAPI, Version=0.2.7.1, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="SEModAPI, Version=0.3.0.1, Culture=neutral, processorArchitecture=AMD64">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\Applications\Steam\SteamApps\common\SpaceEngineers\DedicatedServer64\SEModAPI.dll</HintPath>
+      <HintPath>..\..\SE-Community-Mod-API\SEServerExtender\bin\x64\Release\SEModAPI.dll</HintPath>
     </Reference>
-    <Reference Include="SEModAPIExtensions, Version=0.1.7.4, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="SEModAPIExtensions, Version=0.2.0.1, Culture=neutral, processorArchitecture=AMD64">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\Applications\Steam\SteamApps\common\SpaceEngineers\DedicatedServer64\SEModAPIExtensions.dll</HintPath>
+      <HintPath>..\..\SE-Community-Mod-API\SEServerExtender\bin\x64\Release\SEModAPIExtensions.dll</HintPath>
     </Reference>
-    <Reference Include="SEModAPIInternal, Version=0.2.4.4, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="SEModAPIInternal, Version=0.3.0.1, Culture=neutral, processorArchitecture=AMD64">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\Applications\Steam\SteamApps\common\SpaceEngineers\DedicatedServer64\SEModAPIInternal.dll</HintPath>
+      <HintPath>..\..\SE-Community-Mod-API\SEServerExtender\bin\x64\Release\SEModAPIInternal.dll</HintPath>
     </Reference>
     <Reference Include="System" />
-    <Reference Include="System.Data" />
     <Reference Include="System.Design" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.IO.Compression.FileSystem" />
@@ -214,15 +232,15 @@
     <Reference Include="System.XML" />
     <Reference Include="VRage.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\Applications\Steam\SteamApps\common\SpaceEngineers\DedicatedServer64\VRage.Common.dll</HintPath>
+      <HintPath>..\..\SE-Community-Mod-API\GameLibraries\VRage.Common.dll</HintPath>
     </Reference>
     <Reference Include="VRage.Library, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\Applications\Steam\SteamApps\common\SpaceEngineers\DedicatedServer64\VRage.Library.dll</HintPath>
+      <HintPath>..\..\SE-Community-Mod-API\GameLibraries\VRage.Library.dll</HintPath>
     </Reference>
     <Reference Include="VRage.Math, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\Applications\Steam\SteamApps\common\SpaceEngineers\DedicatedServer64\VRage.Math.dll</HintPath>
+      <HintPath>..\..\SE-Community-Mod-API\GameLibraries\VRage.Math.dll</HintPath>
     </Reference>
     <Reference Include="WindowsBase" />
   </ItemGroup>
@@ -240,10 +258,14 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>copy "$(TargetPath)" "C:\ProgramData\SpaceEngineersDedicated\survival test\Mods\Essentials\"
+    <PostBuildEvent>
+    </PostBuildEvent>
+  </PropertyGroup>
+  <PropertyGroup>
+    <PreBuildEvent>copy "$(TargetPath)" "C:\ProgramData\SpaceEngineersDedicated\survival test\Mods\Essentials\"
 set textTemplatingPath="%25CommonProgramFiles(x86)%25\Microsoft Shared\TextTemplating\$(VisualStudioVersion)\texttransform.exe"
 if %25textTemplatingPath%25=="\Microsoft Shared\TextTemplating\$(VisualStudioVersion)\texttransform.exe" set textTemplatingPath="%25CommonProgramFiles%25\Microsoft Shared\TextTemplating\$(VisualStudioVersion)\texttransform.exe"
-%25textTemplatingPath%25 "$(ProjectDir)AssemblyFileVersion.tt"</PostBuildEvent>
+%25textTemplatingPath%25 "$(ProjectDir)AssemblyFileVersion.tt"</PreBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

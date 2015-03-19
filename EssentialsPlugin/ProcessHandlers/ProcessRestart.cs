@@ -1,21 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.IO;
-using System.Threading;
-using EssentialsPlugin.Utility;
-using System.Windows.Forms;
-using SEModAPIInternal.API.Common;
-using SEModAPIExtensions.API;
-using Sandbox.ModAPI;
-using VRageMath;
-
-using EssentialsPlugin.Settings;
-
-namespace EssentialsPlugin.ProcessHandler
+﻿namespace EssentialsPlugin.ProcessHandlers
 {
+	using System;
+	using System.Collections.Generic;
+	using System.IO;
+	using System.Threading;
+	using System.Windows.Forms;
+	using EssentialsPlugin.Settings;
+	using EssentialsPlugin.Utility;
+	using Sandbox.ModAPI;
+	using SEModAPIExtensions.API;
+	using SEModAPIInternal.API.Common;
+	using VRageMath;
+
 	class ProcessRestart : ProcessHandlerBase
 	{
 		static private DateTime? m_forcedRestart = null;
@@ -95,10 +91,10 @@ namespace EssentialsPlugin.ProcessHandler
 			// If we're not a service, restart with a .bat otherwise just exit and let the service be restarted
 			if (Environment.UserInteractive)
 			{
-				String restartText = "%windir%/system32/timeout /t 30\r\n";
-				restartText += String.Format("cd /d \"{0}\"\r\n", System.IO.Path.GetDirectoryName(Application.ExecutablePath));
+				string restartText = "%windir%/system32/timeout /t 30\r\n";
+				restartText += String.Format("cd /d \"{0}\"\r\n", Path.GetDirectoryName(Application.ExecutablePath));
 				restartText += PluginSettings.Instance.RestartAddedProcesses + "\r\n";
-				restartText += System.IO.Path.GetFileName(Application.ExecutablePath) + " " + Server.Instance.CommandLineArgs.Args + "\r\n";
+				restartText += Path.GetFileName(Application.ExecutablePath) + " " + Server.Instance.CommandLineArgs.Args + "\r\n";
 
 				File.WriteAllText("RestartApp.bat", restartText);
 				System.Diagnostics.Process.Start("RestartApp.bat");

@@ -1,26 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Threading;
-using System.IO;
-
-using EssentialsPlugin.Utility;
-
-using Sandbox.ModAPI;
-using Sandbox.Common.ObjectBuilders;
-using Sandbox.Common;
-
-using VRageMath;
-
-using SEModAPIInternal.API.Entity;
-using SEModAPIInternal.API.Entity.Sector.SectorObject;
-using SEModAPIInternal.API.Entity.Sector.SectorObject.CubeGrid.CubeBlock;
-using SEModAPIInternal.API.Common;
-
-namespace EssentialsPlugin.ChatHandlers
+﻿namespace EssentialsPlugin.ChatHandlers.Admin
 {
+	using EssentialsPlugin.Utility;
+
 	public class HandleAdminBackup : ChatHandlerBase
 	{
 		public override string GetHelp()
@@ -43,9 +24,9 @@ namespace EssentialsPlugin.ChatHandlers
 			return true;
 		}
 
-		public override bool HandleCommand(ulong userId, string[] words)
+		public override bool HandleCommand( ulong userId, string command )
 		{
-			Communication.SendPrivateInformation(userId, string.Format("Creating a save game backup ..."));
+			Communication.SendPrivateInformation( userId, string.Format( "Creating a save game backup ..." ) );
 			Backup.Create(PluginSettings.Instance.BackupBaseDirectory, PluginSettings.Instance.BackupCreateSubDirectories, PluginSettings.Instance.BackupAsteroids, PluginSettings.Instance.BackupEssentials);
 			Communication.SendPrivateInformation(userId, string.Format("Save game backup created"));
 			return true;

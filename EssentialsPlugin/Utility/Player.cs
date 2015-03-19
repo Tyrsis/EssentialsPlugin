@@ -3,7 +3,6 @@ using System.Linq;
 using System.Threading;
 using System.IO;
 using System.Collections.Generic;
-using System.Xml;
 using System.Xml.Serialization;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -153,9 +152,9 @@ namespace EssentialsPlugin.Utility
 			foreach (MyObjectBuilder_CubeBlock block in gridEntity.BaseCubeBlocks)
 			{
 				// set ownership
-				if (block is MyObjectBuilder_Cockpit)
+				MyObjectBuilder_Cockpit cockpit = block as MyObjectBuilder_Cockpit;
+				if (cockpit != null)
 				{
-					MyObjectBuilder_Cockpit cockpit = (MyObjectBuilder_Cockpit)block;
 					cockpit.Pilot = charEntity;
 				}
 			}
@@ -261,12 +260,7 @@ namespace EssentialsPlugin.Utility
 			}
 			catch (Exception ex)
 			{
-				LogManager.APILog.WriteLine("Failed to invoke entity method '" + methodName + "' on type '" + gameEntity.GetType().FullName + "': " + ex.Message);
-
-				if (SandboxGameAssemblyWrapper.IsDebugging)
-					LogManager.ErrorLog.WriteLine(Environment.StackTrace);
-
-				LogManager.ErrorLog.WriteLine(ex);
+				ApplicationLog.Error( "Failed to invoke entity method '" + methodName + "' on type '" + gameEntity.GetType( ).FullName + "': " + ex.Message );
 				return null;
 			}
 		}
@@ -277,7 +271,7 @@ namespace EssentialsPlugin.Utility
 			{
 				if (gameEntity == null)
 					throw new Exception("Game entity was null");
-				if (methodName == null || methodName.Length == 0)
+				if (string.IsNullOrEmpty( methodName ))
 					throw new Exception("Method name was empty");
 				MethodInfo method = gameEntity.GetType().GetMethod(methodName);
 				if (method == null)
@@ -299,10 +293,7 @@ namespace EssentialsPlugin.Utility
 			}
 			catch (Exception ex)
 			{
-				LogManager.APILog.WriteLine("Failed to get entity method '" + methodName + "': " + ex.Message);
-				if (SandboxGameAssemblyWrapper.IsDebugging)
-					LogManager.ErrorLog.WriteLine(Environment.StackTrace);
-				LogManager.ErrorLog.WriteLine(ex);
+				ApplicationLog.Error( "Failed to get entity method '" + methodName + "': " + ex.Message );
 				return null;
 			}
 		}
@@ -316,7 +307,7 @@ namespace EssentialsPlugin.Utility
 
 				if (gameEntity == null)
 					throw new Exception("Game entity was null");
-				if (methodName == null || methodName.Length == 0)
+				if (string.IsNullOrEmpty( methodName ))
 					throw new Exception("Method name was empty");
 				MethodInfo method = gameEntity.GetType().GetMethod(methodName, argTypes);
 				if (method == null)
@@ -338,10 +329,7 @@ namespace EssentialsPlugin.Utility
 			}
 			catch (Exception ex)
 			{
-				LogManager.APILog.WriteLine("Failed to get entity method '" + methodName + "': " + ex.Message);
-				if (SandboxGameAssemblyWrapper.IsDebugging)
-					LogManager.ErrorLog.WriteLine(Environment.StackTrace);
-				LogManager.ErrorLog.WriteLine(ex);
+				ApplicationLog.Error( "Failed to get entity method '" + methodName + "': " + ex.Message );
 				return null;
 			}
 		}
@@ -397,7 +385,7 @@ namespace EssentialsPlugin.Utility
 					Load();
 				}
 
-				return Players.m_instance; 
+				return m_instance; 
 			}
 		}
 
@@ -604,8 +592,8 @@ namespace EssentialsPlugin.Utility
 
 					});
 
-					Players.Instance.UpdatePlayers(playerItems);
-					Logging.WriteLineAndConsole(string.Format("Completed checking logs in {0}s: {2} ({1}) steamIds", (DateTime.Now - start).TotalSeconds, playerItems.Count, Players.Instance.PlayerLogins.Count));
+					Instance.UpdatePlayers(playerItems);
+					Logging.WriteLineAndConsole(string.Format("Completed checking logs in {0}s: {2} ({1}) steamIds", (DateTime.Now - start).TotalSeconds, playerItems.Count, Instance.PlayerLogins.Count));
 				}));
 			}
 			finally

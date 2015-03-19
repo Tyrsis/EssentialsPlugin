@@ -1,23 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Threading;
-using System.IO;
-
 using EssentialsPlugin.Utility;
 
 using Sandbox.ModAPI;
 using Sandbox.Common.ObjectBuilders;
-
-using VRageMath;
-
-using SEModAPIInternal.API.Entity;
-using SEModAPIInternal.API.Entity.Sector.SectorObject;
-using SEModAPIInternal.API.Entity.Sector.SectorObject.CubeGrid;
-using SEModAPIInternal.API.Entity.Sector.SectorObject.CubeGrid.CubeBlock;
-
 using SEModAPIInternal.API.Common;
 
 namespace EssentialsPlugin.ChatHandlers
@@ -44,9 +30,10 @@ namespace EssentialsPlugin.ChatHandlers
 		}
 
 		// /admin movefrom x y z x y z radius
-		public override bool HandleCommand(ulong userId, string[] words)
+		public override bool HandleCommand( ulong userId, string command )
 		{
-			HashSet<IMyEntity> entities = new HashSet<IMyEntity>();
+			string[ ] words = command.Split( ' ' );
+			HashSet<IMyEntity> entities = new HashSet<IMyEntity>( );
 			Wrapper.GameAction(() =>
 			{
 				MyAPIGateway.Entities.GetEntities(entities, x => x is IMyCubeGrid);
@@ -88,7 +75,6 @@ namespace EssentialsPlugin.ChatHandlers
 				if(item.SteamId == 0)
 					continue;
 
-				PlayerItem playerItem;
 				if (!Players.Instance.PlayerLogins.ContainsKey(item.SteamId))
 				{
 					Communication.SendPrivateInformation(userId, string.Format("No login information: {0}", item.Name));
@@ -96,7 +82,7 @@ namespace EssentialsPlugin.ChatHandlers
 					continue;
 				}
 
-				playerItem = Players.Instance.PlayerLogins[item.SteamId];
+				PlayerItem playerItem = Players.Instance.PlayerLogins[item.SteamId];
 				if (DateTime.Now - playerItem.LastLogin > TimeSpan.FromDays(20))
 				{
 					Communication.SendPrivateInformation(userId, string.Format("Player hasn't logged in 20 days: {0}", item.Name));

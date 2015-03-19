@@ -1,24 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Threading;
-using System.IO;
-
 using EssentialsPlugin.Utility;
 
 using Sandbox.ModAPI;
-using Sandbox.Common.ObjectBuilders;
-
 using VRageMath;
-
-using SEModAPIInternal.API.Entity;
-using SEModAPIInternal.API.Entity.Sector.SectorObject;
-using SEModAPIInternal.API.Entity.Sector.SectorObject.CubeGrid;
-using SEModAPIInternal.API.Entity.Sector.SectorObject.CubeGrid.CubeBlock;
-
-using SEModAPIInternal.API.Common;
 
 namespace EssentialsPlugin.ChatHandlers
 {
@@ -44,9 +29,10 @@ namespace EssentialsPlugin.ChatHandlers
 		}
 
 		// /admin movefrom x y z x y z radius
-		public override bool HandleCommand(ulong userId, string[] words)
+		public override bool HandleCommand( ulong userId, string command )
 		{
-			if (words.Count() < 2)
+			string[ ] words = command.Split( ' ' );
+			if ( words.Count( ) < 2 )
 			{
 				Communication.SendPrivateInformation(userId, GetHelp());
 				return true;
@@ -68,7 +54,6 @@ namespace EssentialsPlugin.ChatHandlers
 			else
 				targetName = string.Join(" ", words.Skip(1).ToArray());
 
-			Vector3D position;
 			IMyEntity entity = Player.FindControlledEntity(targetName);
 			if (entity == null)
 			{
@@ -80,7 +65,7 @@ namespace EssentialsPlugin.ChatHandlers
 				}
 			}
 
-			position = entity.GetPosition();
+			Vector3D position = entity.GetPosition();
 
 			Communication.SendPrivateInformation(userId, string.Format("Trying to move {0} to within {1}m of {2}.  This may take about 20 seconds.", sourceName, distance, targetName));
 			Vector3D startPosition = MathUtility.RandomPositionFromPoint((Vector3)position, distance);

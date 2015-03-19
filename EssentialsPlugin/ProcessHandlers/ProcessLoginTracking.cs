@@ -1,19 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using EssentialsPlugin.Utility;
-using Sandbox.ModAPI;
-using SEModAPIInternal.API.Common;
-using System.IO;
-using System.Xml;
-using System.Xml.Serialization;
-using VRage.Common.Utils;
-using System.Text.RegularExpressions;
-using System.Threading;
-
-namespace EssentialsPlugin.ProcessHandler
+﻿namespace EssentialsPlugin.ProcessHandlers
 {
+	using EssentialsPlugin.Utility;
+
 	public class ProcessLoginTracking : ProcessHandlerBase
 	{
 		public ProcessLoginTracking()
@@ -30,11 +18,6 @@ namespace EssentialsPlugin.ProcessHandler
 		public override int GetUpdateResolution()
 		{
 			return 10000;
-		}
-
-		public override void Handle()
-		{
-			base.Handle();
 		}
 
 		public override void OnPlayerJoined(ulong remoteUserId)

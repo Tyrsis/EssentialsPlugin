@@ -1,13 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using SEModAPIInternal.API.Entity;
 using SEModAPIInternal.API.Entity.Sector.SectorObject;
-using SEModAPIInternal.API.Entity.Sector.SectorObject.CubeGrid.CubeBlock;
-using SEModAPIInternal.API.Common;
-
 using Sandbox.ModAPI;
 using Sandbox.Common.ObjectBuilders;
 
@@ -27,13 +21,7 @@ namespace EssentialsPlugin.Utility
 
 		public static TimedEntityCleanup Instance
 		{
-			get 			
-			{
-				if (m_instance == null)
-					m_instance = new TimedEntityCleanup();
-
-				return m_instance; 
-			}
+			get { return m_instance ?? ( m_instance = new TimedEntityCleanup( ) ); }
 		}
 
 		public TimedEntityCleanup()
@@ -57,7 +45,7 @@ namespace EssentialsPlugin.Utility
 		{
 			lock (m_items)
 			{
-				if (m_items.Count() < 1)
+				if (!m_items.Any())
 					return;
 
 				for (int r = m_items.Count() - 1; r >= 0; r--)

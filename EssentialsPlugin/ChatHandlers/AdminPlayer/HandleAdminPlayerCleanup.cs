@@ -45,9 +45,10 @@ namespace EssentialsPlugin.ChatHandlers
 		}
 
 		// /admin movefrom x y z x y z radius
-		public override bool HandleCommand(ulong userId, string[] words)
+		public override bool HandleCommand( ulong userId, string command )
 		{
-			Logging.WriteLineAndConsole("Starting scan ...");
+			string[ ] words = command.Split( ' ' );
+			Logging.WriteLineAndConsole( "Starting scan ..." );
 
 			List<IMyIdentity> players = new List<IMyIdentity>();
 			MyAPIGateway.Players.GetAllIdentites(players);
@@ -120,7 +121,7 @@ namespace EssentialsPlugin.ChatHandlers
 					else
 					{
 						Logging.WriteLineAndConsole(string.Format("Removing member with no player info: {0}", member.PlayerId));
-						MyAPIGateway.Session.Factions.KickPlayerFromFaction(member.PlayerId);
+						MyAPIGateway.Session.Factions.KickMember(faction.FactionId,member.PlayerId );
 					}
 				}
 

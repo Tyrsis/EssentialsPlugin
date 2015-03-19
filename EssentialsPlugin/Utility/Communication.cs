@@ -1,11 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.IO;
-
-using Sandbox.ModAPI;
 using Sandbox.Common.ObjectBuilders;
 using Sandbox.Common;
 using VRageMath;
@@ -14,9 +9,6 @@ using SEModAPIInternal.API.Entity;
 using SEModAPIInternal.API.Entity.Sector.SectorObject;
 using SEModAPIInternal.API.Common;
 using SEModAPIExtensions.API;
-
-using EssentialsPlugin.Utility;
-using EssentialsPlugin.ChatHandlers;
 
 namespace EssentialsPlugin.Utility
 {
@@ -56,9 +48,9 @@ namespace EssentialsPlugin.Utility
 
 			foreach (MyObjectBuilder_CubeBlock block in entity.BaseCubeBlocks)
 			{
-				if (block is MyObjectBuilder_Beacon)
+				MyObjectBuilder_Beacon beacon = block as MyObjectBuilder_Beacon;
+				if (beacon != null)
 				{
-					MyObjectBuilder_Beacon beacon = (MyObjectBuilder_Beacon)block;
 					beacon.CustomName = message;
 				}
 			}
@@ -77,9 +69,9 @@ namespace EssentialsPlugin.Utility
 
 			foreach (MyObjectBuilder_CubeBlock block in entity.BaseCubeBlocks)
 			{
-				if (block is MyObjectBuilder_Beacon)
+				MyObjectBuilder_Beacon beacon = block as MyObjectBuilder_Beacon;
+				if (beacon != null)
 				{
-					MyObjectBuilder_Beacon beacon = (MyObjectBuilder_Beacon)block;
 					beacon.CustomName = message;
 				}
 			}
@@ -94,7 +86,7 @@ namespace EssentialsPlugin.Utility
 			{
 				if (Player.CheckPlayerSameFaction(playerSteamId, steamId))
 				{
-					Communication.SendClientMessage(steamId, message);
+					SendClientMessage(steamId, message);
 				}
 			}
 		}

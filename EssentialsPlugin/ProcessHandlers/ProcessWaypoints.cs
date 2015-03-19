@@ -1,25 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Threading;
-
-using Sandbox.ModAPI;
-using Sandbox.Common.ObjectBuilders;
-using VRageMath;
-
-using SEModAPIInternal.API.Common;
-using SEModAPIInternal.API.Entity;
-using SEModAPIInternal.API.Entity.Sector.SectorObject;
-using SEModAPIInternal.API.Entity.Sector.SectorObject.CubeGrid;
-using SEModAPIInternal.API.Entity.Sector.SectorObject.CubeGrid.CubeBlock;
-
-using EssentialsPlugin.Utility;
-using EssentialsPlugin.Settings;
-
-namespace EssentialsPlugin.ProcessHandler
+﻿namespace EssentialsPlugin.ProcessHandlers
 {
+	using System;
+	using System.Collections.Generic;
+	using System.Linq;
+	using EssentialsPlugin.Settings;
+	using EssentialsPlugin.Utility;
+	using Sandbox.ModAPI;
+	using VRageMath;
+
 	public class ProcessWaypoints : ProcessHandlerBase
 	{
 		private List<ulong> m_waypointAdd = new List<ulong>();

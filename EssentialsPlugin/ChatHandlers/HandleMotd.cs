@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using EssentialsPlugin.Utility;
 using EssentialsPlugin.Settings;
-using EssentialsPlugin.ProcessHandler;
 using Sandbox.ModAPI;
 
 namespace EssentialsPlugin.ChatHandlers
@@ -34,9 +31,9 @@ namespace EssentialsPlugin.ChatHandlers
 			return true;
 		}
 
-		public override bool HandleCommand(ulong userId, string[] words)
+		public override bool HandleCommand( ulong userId, string command )
 		{
-			if(!PluginSettings.Instance.GreetingItem.Enabled)
+			if ( !PluginSettings.Instance.GreetingItem.Enabled )
 			{
 				Communication.SendPrivateInformation(userId, string.Format("No MOTD dialog defined on server."));
 				return true;

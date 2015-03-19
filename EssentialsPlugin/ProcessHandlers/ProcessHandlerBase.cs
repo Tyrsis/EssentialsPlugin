@@ -1,22 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using SEModAPIExtensions.API;
-using SEModAPIExtensions.API.Plugin;
-using SEModAPIExtensions.API.Plugin.Events;
-
-using SEModAPIInternal.API.Entity.Sector.SectorObject.CubeGrid;
-using SEModAPIInternal.API.Entity.Sector.SectorObject;
-
-using Sandbox.ModAPI;
-
-using EssentialsPlugin.Utility;
-
-namespace EssentialsPlugin.ProcessHandler
+﻿namespace EssentialsPlugin.ProcessHandlers
 {
+	using System;
+	using Sandbox.ModAPI;
+	using SEModAPIInternal.API.Entity.Sector.SectorObject;
+
 	public abstract class ProcessHandlerBase
 	{
 		private DateTime m_lastUpdate;

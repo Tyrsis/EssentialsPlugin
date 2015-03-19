@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 using VRageMath;
 
 using Sandbox.Common.ObjectBuilders;
@@ -55,7 +52,7 @@ namespace EssentialsPlugin.Utility
 		{
 			Boolean intersects = false;
 			intersectElement = 0;
-			OrientedBoundingBoxD targetTestBounding = Entity.GetBoundingBox(beaconList);
+			OrientedBoundingBoxD targetTestBounding = GetBoundingBox(beaconList);
 			if (testList.Count > 0)
 			{
 				for (int r = 0; r < testList.Count; r++)
@@ -64,7 +61,7 @@ namespace EssentialsPlugin.Utility
 					if (beaconTestList.Count != 4)
 						continue;
 
-					OrientedBoundingBoxD testBounding = Entity.GetBoundingBox(beaconTestList);
+					OrientedBoundingBoxD testBounding = GetBoundingBox(beaconTestList);
 					if (testBounding.Contains(ref targetTestBounding) != ContainmentType.Disjoint)
 					{
 						intersectElement = r;
@@ -129,8 +126,7 @@ namespace EssentialsPlugin.Utility
 			Vector3D rawSize = new Vector3D(size.X * 2.5f, size.Y * 2.5f, size.Z * 2.5f);
 			Vector3D expandedSize = new Vector3D(Math.Max(size.X, smallestNotZero) * 2.5f, Math.Max(size.Y, smallestNotZero) * 2.5f, Math.Max(size.Z, smallestNotZero) * 2.5f);
 
-			BoundingBoxD bb;
-			bb = new BoundingBoxD(new Vector3D(0, 0, 0), expandedSize).Translate(pos - (expandedSize / 2));
+			BoundingBoxD bb = new BoundingBoxD(new Vector3D(0, 0, 0), expandedSize).Translate(pos - (expandedSize / 2));
 			return new OrientedBoundingBoxD(bb.Center, bb.HalfExtents, Quaternion.CreateFromRotationMatrix(parent.WorldMatrix.GetOrientation()));
 		}
 

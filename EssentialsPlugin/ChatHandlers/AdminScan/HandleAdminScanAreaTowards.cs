@@ -1,19 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Threading;
-
 using EssentialsPlugin.Utility;
 
 using Sandbox.ModAPI;
 using Sandbox.Common.ObjectBuilders;
 
 using VRageMath;
-
-using SEModAPIInternal.API.Entity;
-using SEModAPIInternal.API.Entity.Sector.SectorObject;
 
 namespace EssentialsPlugin.ChatHandlers
 {
@@ -40,9 +32,10 @@ namespace EssentialsPlugin.ChatHandlers
 		}
 
 		// admin scan x y z radius
-		public override bool HandleCommand(ulong userId, string[] words)
+		public override bool HandleCommand( ulong userId, string command )
 		{
-			if (words.Count() != 8 && words.Count() != 0)
+			string[ ] words = command.Split( ' ' );
+			if ( words.Count( ) != 8 && words.Count( ) != 0 )
 				return false;
 
 			if (words.Count() != 8)

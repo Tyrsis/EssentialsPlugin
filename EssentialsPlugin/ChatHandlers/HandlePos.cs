@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Sandbox.ModAPI;
 using EssentialsPlugin.Utility;
 using VRageMath;
@@ -31,7 +28,7 @@ namespace EssentialsPlugin.ChatHandlers
 			return true;
 		}
 
-		public override bool HandleCommand(ulong userId, string[] words)
+		public override bool HandleCommand( ulong userId, string command )
 		{
 			Vector3D position = Vector3D.Zero;
 			Wrapper.GameAction(() => 

@@ -1,49 +1,39 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Threading;
-using System.IO;
-using System.Reflection;
-
-using EssentialsPlugin.Utility;
-
-using Sandbox.ModAPI;
-using Sandbox.ModAPI.Interfaces;
-using Sandbox.Common.ObjectBuilders;
-
-using VRageMath;
-
-using SEModAPIInternal.API.Entity;
-using SEModAPIInternal.API.Entity.Sector.SectorObject;
-using SEModAPIInternal.API.Entity.Sector.SectorObject.CubeGrid.CubeBlock;
-using SEModAPIInternal.API.Common;
-
-using EssentialsPlugin.ProcessHandler;
-
-
-namespace EssentialsPlugin.EntityManagers
+﻿namespace EssentialsPlugin.EntityManagers
 {
+	using System;
+	using System.Collections.Generic;
+	using System.Linq;
+	using System.Threading;
+	using EssentialsPlugin.ProcessHandlers;
+	using EssentialsPlugin.Utility;
+	using Sandbox.Common;
+	using Sandbox.Common.ObjectBuilders;
+	using Sandbox.ModAPI;
+	using Sandbox.ModAPI.Ingame;
+	using SEModAPIInternal.API.Common;
+	using SEModAPIInternal.API.Entity;
+	using VRageMath;
+	using IMyCubeBlock = Sandbox.ModAPI.IMyCubeBlock;
+	using IMyCubeGrid = Sandbox.ModAPI.IMyCubeGrid;
+	using IMyFunctionalBlock = Sandbox.ModAPI.Ingame.IMyFunctionalBlock;
+	using IMyProductionBlock = Sandbox.ModAPI.Ingame.IMyProductionBlock;
+	using IMySlimBlock = Sandbox.ModAPI.IMySlimBlock;
+	using IMyTerminalBlock = Sandbox.ModAPI.Ingame.IMyTerminalBlock;
+
 	public class EntityManagement
 	{
-		private static volatile bool m_checkReveal = false;
-		private static volatile bool m_checkConceal = false;
-		private static HashSet<IMyEntity> m_processedGrids = new HashSet<IMyEntity>();
-		private static List<long> m_removedGrids = new List<long>();
-		private static List<ulong> m_online = new List<ulong>();
-
-		public static List<ulong> Online
-		{
-			get { return m_online; }
-		}
+		private static volatile bool _checkReveal = false;
+		private static volatile bool _checkConceal = false;
+		private static readonly HashSet<IMyEntity> ProcessedGrids = new HashSet<IMyEntity>();
+		private static readonly List<long> RemovedGrids = new List<long>();
+		private static readonly List<ulong> Online = new List<ulong>();
 
 		public static void CheckAndConcealEntities()
 		{
-			if (m_checkConceal)
+			if (_checkConceal)
 				return;
 			
-			m_checkConceal = true;
+			_checkConceal = true;
 			try
 			{
 				DateTime start = DateTime.Now;
@@ -52,7 +42,7 @@ namespace EssentialsPlugin.EntityManagers
 				double getGrids = 0d;
 				double co = 0f;
 
-				m_processedGrids.Clear();
+				ProcessedGrids.Clear();
 				List<IMyPlayer> players = new List<IMyPlayer>();
 				HashSet<IMyEntity> entities = new HashSet<IMyEntity>();
 				HashSet<IMyEntity> entitiesFiltered = new HashSet<IMyEntity>();
@@ -181,7 +171,7 @@ namespace EssentialsPlugin.EntityManagers
 			}
 			finally
 			{
-				m_checkConceal = false;
+				_checkConceal = false;
 			}
 		}
 
@@ -191,7 +181,7 @@ namespace EssentialsPlugin.EntityManagers
 
 			// Live dangerously
 			grid.GetBlocks(blocks, x => x.FatBlock != null);
-			//CubeGrids.GetAllConnectedBlocks(m_processedGrids, grid, blocks, x => x.FatBlock != null);
+			//CubeGrids.GetAllConnectedBlocks(_processedGrids, grid, blocks, x => x.FatBlock != null);
 
 			int beaconCount = 0;
 			//bool found = false;
@@ -202,7 +192,7 @@ namespace EssentialsPlugin.EntityManagers
 
 				if (cubeBlock.BlockDefinition.TypeId == typeof(MyObjectBuilder_Beacon))
 				{
-					Sandbox.ModAPI.Ingame.IMyBeacon beacon = (Sandbox.ModAPI.Ingame.IMyBeacon)cubeBlock;					
+					IMyBeacon beacon = (IMyBeacon)cubeBlock;					
 					//MyObjectBuilder_Beacon beacon = (MyObjectBuilder_Beacon)cubeBlock.GetObjectBuilderCubeBlock();
 					beaconCount++;
 					// Keep this return here, as 4 beacons always means true
@@ -214,7 +204,7 @@ namespace EssentialsPlugin.EntityManagers
 					if (!beacon.Enabled)
 						continue;
 
-					Sandbox.ModAPI.Ingame.IMyTerminalBlock terminalBlock = (Sandbox.ModAPI.Ingame.IMyTerminalBlock)cubeBlock;
+					IMyTerminalBlock terminalBlock = (IMyTerminalBlock)cubeBlock;
 //					Console.WriteLine("Found: {0} {1} {2}", beacon.BroadcastRadius, terminalBlock.IsWorking, terminalBlock.IsFunctional);
 					//if (!terminalBlock.IsWorking)
 					//{
@@ -240,12 +230,12 @@ namespace EssentialsPlugin.EntityManagers
 				if (cubeBlock.BlockDefinition.TypeId == typeof(MyObjectBuilder_RadioAntenna))
 				{
 					//MyObjectBuilder_RadioAntenna antenna = (MyObjectBuilder_RadioAntenna)cubeBlock.GetObjectBuilderCubeBlock();
-					Sandbox.ModAPI.Ingame.IMyRadioAntenna antenna = (Sandbox.ModAPI.Ingame.IMyRadioAntenna)cubeBlock;
+					IMyRadioAntenna antenna = (IMyRadioAntenna)cubeBlock;
 
 					if (!antenna.Enabled)
 						continue;
 
-					Sandbox.ModAPI.Ingame.IMyTerminalBlock terminalBlock = (Sandbox.ModAPI.Ingame.IMyTerminalBlock)cubeBlock;
+					IMyTerminalBlock terminalBlock = (IMyTerminalBlock)cubeBlock;
 					//if (!terminalBlock.IsWorking)
 					//	continue;
 
@@ -268,20 +258,20 @@ namespace EssentialsPlugin.EntityManagers
 				if (cubeBlock.BlockDefinition.TypeId == typeof(MyObjectBuilder_MedicalRoom))
 				{
 					//MyObjectBuilder_MedicalRoom medical = (MyObjectBuilder_MedicalRoom)cubeBlock.GetObjectBuilderCubeBlock();
-					Sandbox.ModAPI.Ingame.IMyMedicalRoom medical = (Sandbox.ModAPI.Ingame.IMyMedicalRoom)cubeBlock;
+					IMyMedicalRoom medical = (IMyMedicalRoom)cubeBlock;
 					
 					if (!medical.Enabled)
 						continue;
 
-					Sandbox.ModAPI.Ingame.IMyFunctionalBlock functionalBlock = (Sandbox.ModAPI.Ingame.IMyFunctionalBlock)cubeBlock;
+					IMyFunctionalBlock functionalBlock = (IMyFunctionalBlock)cubeBlock;
 					//if (!terminalBlock.IsWorking)
 					//	continue;
 
 					if(PluginSettings.Instance.DynamicConcealIncludeMedBays)
 					{
-						lock (m_online)
+						lock (Online)
 						{
-							foreach (ulong connectedPlayer in m_online)
+							foreach (ulong connectedPlayer in Online)
 							{
 								//if (PlayerMap.Instance.GetPlayerIdsFromSteamId(connectedPlayer).Count < 1)
 								//continue;
@@ -289,7 +279,7 @@ namespace EssentialsPlugin.EntityManagers
 								//long playerId = PlayerMap.Instance.GetPlayerIdsFromSteamId(connectedPlayer).First();
 								long playerId = PlayerMap.Instance.GetFastPlayerIdFromSteamId(connectedPlayer);
 
-								if (functionalBlock.OwnerId == playerId || (functionalBlock.GetUserRelationToOwner(playerId) == Sandbox.Common.MyRelationsBetweenPlayerAndBlock.FactionShare))
+								if (functionalBlock.OwnerId == playerId || (functionalBlock.GetUserRelationToOwner(playerId) == MyRelationsBetweenPlayerAndBlock.FactionShare))
 								//if (functionalBlock.Owner == playerId || (functionalBlock.ShareMode == MyOwnershipShareModeEnum.Faction && Player.CheckPlayerSameFaction(functionalBlock.Owner, playerId)))
 								//if (medical.HasPlayerAccess(playerId))
 								{
@@ -323,7 +313,7 @@ namespace EssentialsPlugin.EntityManagers
 				if (cubeBlock.BlockDefinition.TypeId == typeof(MyObjectBuilder_Refinery) || cubeBlock.BlockDefinition.TypeId == typeof(MyObjectBuilder_Assembler))
 				{
 					//MyObjectBuilder_ProductionBlock production = (MyObjectBuilder_ProductionBlock)cubeBlock.GetObjectBuilderCubeBlock();
-					Sandbox.ModAPI.Ingame.IMyProductionBlock production = (Sandbox.ModAPI.Ingame.IMyProductionBlock)cubeBlock;
+					IMyProductionBlock production = (IMyProductionBlock)cubeBlock;
 					if (!production.Enabled)
 						continue;
 
@@ -362,7 +352,7 @@ namespace EssentialsPlugin.EntityManagers
 					if (!medical.Enabled)
 						continue;
 
-					Sandbox.ModAPI.Ingame.IMyTerminalBlock terminalBlock = (Sandbox.ModAPI.Ingame.IMyTerminalBlock)cubeBlock;
+					IMyTerminalBlock terminalBlock = (IMyTerminalBlock)cubeBlock;
 					long playerId = PlayerMap.Instance.GetFastPlayerIdFromSteamId(steamId);
 					if (medical.Owner == playerId || (medical.ShareMode == MyOwnershipShareModeEnum.Faction && Player.CheckPlayerSameFaction(medical.Owner, playerId)))
 					{
@@ -426,7 +416,7 @@ namespace EssentialsPlugin.EntityManagers
 				MyAPIGateway.Entities.RemapObjectBuilder(builder);
 
 				pos = 3;
-				if (m_removedGrids.Contains(entity.EntityId))
+				if (RemovedGrids.Contains(entity.EntityId))
 				{
 					Logging.WriteLineAndConsole("Conceal", string.Format("Concealing - Id: {0} DUPE FOUND - Display: {1} OwnerId: {2} OwnerName: {3}", entity.EntityId, entity.DisplayName, ownerId, ownerName, builder.EntityId));
 					BaseEntityNetworkManager.BroadcastRemoveEntity(entity, false);
@@ -449,26 +439,26 @@ namespace EssentialsPlugin.EntityManagers
 								BlockManagement.Instance.EnableGrid((IMyCubeGrid)entity);
 						}
 						*/
-						IMyEntity newEntity = MyAPIGateway.Entities.CreateFromObjectBuilder(builder);
+					IMyEntity newEntity = MyAPIGateway.Entities.CreateFromObjectBuilder(builder);
 						Logging.WriteLineAndConsole("Conceal", string.Format("Start Concealing - Id: {0} -> {4} Display: {1} OwnerId: {2} OwnerName: {3}", entity.EntityId, entity.DisplayName, ownerId, ownerName, newEntity.EntityId));
-						if (newEntity == null)
-						{
-							Logging.WriteLineAndConsole("Conceal", string.Format("Issue - CreateFromObjectBuilder failed: {0}", newEntity.EntityId));
-							return;
-						}
-
-						m_removedGrids.Add(entity.EntityId);
-						BaseEntityNetworkManager.BroadcastRemoveEntity(entity, false);
-						MyAPIGateway.Entities.AddEntity(newEntity, false);
-						Logging.WriteLineAndConsole("Conceal", string.Format("End Concealing - Id: {0} -> {4} Display: {1} OwnerId: {2} OwnerName: {3}", entity.EntityId, entity.DisplayName, ownerId, ownerName, newEntity.EntityId));
-					}
-					else
+					if (newEntity == null)
 					{
+						Logging.WriteLineAndConsole("Conceal", string.Format("Issue - CreateFromObjectBuilder failed: {0}", newEntity.EntityId));
+						return;
+					}
+
+						RemovedGrids.Add(entity.EntityId);
+					BaseEntityNetworkManager.BroadcastRemoveEntity(entity, false);
+					MyAPIGateway.Entities.AddEntity(newEntity, false);
+						Logging.WriteLineAndConsole("Conceal", string.Format("End Concealing - Id: {0} -> {4} Display: {1} OwnerId: {2} OwnerName: {3}", entity.EntityId, entity.DisplayName, ownerId, ownerName, newEntity.EntityId));
+				}
+					else
+			{
 						Logging.WriteLineAndConsole("Conceal", string.Format("Start Concealing - Id: {0} -> {4} Display: {1} OwnerId: {2} OwnerName: {3}", entity.EntityId, entity.DisplayName, ownerId, ownerName, builder.EntityId));
 						entity.InScene = false;
 						Logging.WriteLineAndConsole("Conceal", string.Format("End Concealing - Id: {0} -> {4} Display: {1} OwnerId: {2} OwnerName: {3}", entity.EntityId, entity.DisplayName, ownerId, ownerName, builder.EntityId));
-					}
-				}
+			}
+		}
 			}
 			catch (Exception ex)
 			{
@@ -478,10 +468,10 @@ namespace EssentialsPlugin.EntityManagers
 
 		public static void CheckAndRevealEntities()
 		{
-			if(m_checkReveal)
+			if(_checkReveal)
 				return;
 
-			m_checkReveal = true;
+			_checkReveal = true;
 			try
 			{
 				DateTime start = DateTime.Now;
@@ -556,7 +546,7 @@ namespace EssentialsPlugin.EntityManagers
 			}
 			finally
 			{
-				m_checkReveal = false;
+				_checkReveal = false;
 			}
 		}
 
@@ -568,7 +558,7 @@ namespace EssentialsPlugin.EntityManagers
 			// Live dangerously
 			List<IMySlimBlock> blocks = new List<IMySlimBlock>();
 			grid.GetBlocks(blocks, x => x.FatBlock != null);
-			//CubeGrids.GetAllConnectedBlocks(m_processedGrids, grid, blocks, x => x.FatBlock != null);
+			//CubeGrids.GetAllConnectedBlocks(_processedGrids, grid, blocks, x => x.FatBlock != null);
 			//bool found = false;
 			//bool powered = false;
 			foreach (IMySlimBlock block in blocks)
@@ -578,7 +568,7 @@ namespace EssentialsPlugin.EntityManagers
 				if (cubeBlock.BlockDefinition.TypeId == typeof(MyObjectBuilder_Beacon))
 				{
 					//MyObjectBuilder_Beacon beacon = (MyObjectBuilder_Beacon)cubeBlock.GetObjectBuilderCubeBlock();
-					Sandbox.ModAPI.Ingame.IMyBeacon beacon = (Sandbox.ModAPI.Ingame.IMyBeacon)cubeBlock;
+					IMyBeacon beacon = (IMyBeacon)cubeBlock;
 					if (!beacon.Enabled)
 						continue;
 
@@ -610,7 +600,7 @@ namespace EssentialsPlugin.EntityManagers
 				if (cubeBlock.BlockDefinition.TypeId == typeof(MyObjectBuilder_RadioAntenna))
 				{
 					//MyObjectBuilder_RadioAntenna antenna = (MyObjectBuilder_RadioAntenna)cubeBlock.GetObjectBuilderCubeBlock();
-					Sandbox.ModAPI.Ingame.IMyRadioAntenna antenna = (Sandbox.ModAPI.Ingame.IMyRadioAntenna)cubeBlock;
+					IMyRadioAntenna antenna = (IMyRadioAntenna)cubeBlock;
 
 					if (!antenna.Enabled)
 						continue;
@@ -638,11 +628,11 @@ namespace EssentialsPlugin.EntityManagers
 				if (cubeBlock.BlockDefinition.TypeId == typeof(MyObjectBuilder_MedicalRoom))
 				{
 					//MyObjectBuilder_MedicalRoom medical = (MyObjectBuilder_MedicalRoom)cubeBlock.GetObjectBuilderCubeBlock();
-					Sandbox.ModAPI.Ingame.IMyMedicalRoom medical = (Sandbox.ModAPI.Ingame.IMyMedicalRoom)cubeBlock;
+					IMyMedicalRoom medical = (IMyMedicalRoom)cubeBlock;
 					if (!medical.Enabled)
 						continue;
 
-					Sandbox.ModAPI.Ingame.IMyFunctionalBlock functionalBlock = (Sandbox.ModAPI.Ingame.IMyFunctionalBlock)cubeBlock;
+					IMyFunctionalBlock functionalBlock = (IMyFunctionalBlock)cubeBlock;
 					if (!functionalBlock.IsFunctional)
 						continue;
 
@@ -651,9 +641,9 @@ namespace EssentialsPlugin.EntityManagers
 					
 					if (PluginSettings.Instance.DynamicConcealIncludeMedBays)
 					{
-						lock (m_online)
+						lock (Online)
 						{
-							foreach (ulong connectedPlayer in m_online)
+							foreach (ulong connectedPlayer in Online)
 							{
 								long playerId = PlayerMap.Instance.GetFastPlayerIdFromSteamId(connectedPlayer);
 								//if (medical.Owner == playerId || (medical.ShareMode == MyOwnershipShareModeEnum.Faction && Player.CheckPlayerSameFaction(medical.Owner, playerId)))
@@ -663,7 +653,7 @@ namespace EssentialsPlugin.EntityManagers
 									return true;
 								}
 
-								if(functionalBlock.GetUserRelationToOwner(playerId) == Sandbox.Common.MyRelationsBetweenPlayerAndBlock.FactionShare)
+								if(functionalBlock.GetUserRelationToOwner(playerId) == MyRelationsBetweenPlayerAndBlock.FactionShare)
 								{
 									reason = string.Format("Grid has medbay and player is factionshare - playerid: {0}", playerId);
 									return true;
@@ -698,7 +688,7 @@ namespace EssentialsPlugin.EntityManagers
 					if (!production.Enabled)
 						continue;
 
-					Sandbox.ModAPI.Ingame.IMyProductionBlock productionBlock = (Sandbox.ModAPI.Ingame.IMyProductionBlock)cubeBlock;
+					IMyProductionBlock productionBlock = (IMyProductionBlock)cubeBlock;
 					if (production.Queue.Length > 0)
 					{
 						reason = string.Format("Grid has production facility that has a queue");
@@ -721,7 +711,7 @@ namespace EssentialsPlugin.EntityManagers
 
 				if (cubeBlock.BlockDefinition.TypeId == typeof(MyObjectBuilder_MedicalRoom))
 				{
-					Sandbox.ModAPI.Ingame.IMyMedicalRoom medical = (Sandbox.ModAPI.Ingame.IMyMedicalRoom)cubeBlock;
+					IMyMedicalRoom medical = (IMyMedicalRoom)cubeBlock;
 					if (!medical.Enabled)
 						continue;
 
@@ -778,7 +768,7 @@ namespace EssentialsPlugin.EntityManagers
 				MyAPIGateway.Entities.RemapObjectBuilder(builder);
 				//builder.EntityId = 0;
 
-				if(m_removedGrids.Contains(entity.EntityId))
+				if(RemovedGrids.Contains(entity.EntityId))
 				{
 					Logging.WriteLineAndConsole("Conceal", string.Format("Revealing - Id: {0} DUPE FOUND Display: {1} OwnerId: {2} OwnerName: {3}  Reason: {4}", entity.EntityId, entity.DisplayName.Replace("\r", "").Replace("\n", ""), ownerId, ownerName, reason));
 					BaseEntityNetworkManager.BroadcastRemoveEntity(entity, false);
@@ -789,24 +779,24 @@ namespace EssentialsPlugin.EntityManagers
 					{
 						IMyEntity newEntity = MyAPIGateway.Entities.CreateFromObjectBuilder(builder);
 						Logging.WriteLineAndConsole("Conceal", string.Format("Start Revealing - Id: {0} -> {4} Display: {1} OwnerId: {2} OwnerName: {3}  Reason: {5}", entity.EntityId, entity.DisplayName.Replace("\r", "").Replace("\n", ""), ownerId, ownerName, newEntity.EntityId, reason));
-						if (newEntity == null)
-						{
-							Logging.WriteLineAndConsole("Conceal", string.Format("Issue - CreateFromObjectBuilder failed: {0}", newEntity.EntityId));
-							return;
-						}
+					if (newEntity == null)
+					{
+						Logging.WriteLineAndConsole("Conceal", string.Format("Issue - CreateFromObjectBuilder failed: {0}", newEntity.EntityId));
+						return;
+					}
 
-						m_removedGrids.Add(entity.EntityId);
-						BaseEntityNetworkManager.BroadcastRemoveEntity(entity, false);
+					RemovedGrids.Add(entity.EntityId);
+					BaseEntityNetworkManager.BroadcastRemoveEntity(entity, false);
 						MyAPIGateway.Entities.AddEntity(newEntity, true);
 
 						/*CC
 						if (PluginSettings.Instance.DynamicClientConcealEnabled)
-						{
+					{
 							ClientEntityManagement.AddEntityState(newEntity.EntityId);
-						}
+					}
 						*/
 
-						builder.EntityId = newEntity.EntityId;
+					builder.EntityId = newEntity.EntityId;
 						List<MyObjectBuilder_EntityBase> addList = new List<MyObjectBuilder_EntityBase>();
 						addList.Add(newEntity.GetObjectBuilder());
 						MyAPIGateway.Multiplayer.SendEntitiesCreated(addList);
@@ -823,11 +813,11 @@ namespace EssentialsPlugin.EntityManagers
 							ClientEntityManagement.AddEntityState(entity.EntityId);
 							List<MyObjectBuilder_EntityBase> addList = new List<MyObjectBuilder_EntityBase>();
 							addList.Add(entity.GetObjectBuilder());
-							MyAPIGateway.Multiplayer.SendEntitiesCreated(addList);
+					MyAPIGateway.Multiplayer.SendEntitiesCreated(addList);
 						}
 						*/
-						Logging.WriteLineAndConsole("Conceal", string.Format("End Revealing - Id: {0} -> {4} Display: {1} OwnerId: {2} OwnerName: {3}  Reason: {4}", entity.EntityId, entity.DisplayName.Replace("\r", "").Replace("\n", ""), ownerId, ownerName, reason));
-					}
+					Logging.WriteLineAndConsole("Conceal", string.Format("End Revealing - Id: {0} -> {4} Display: {1} OwnerId: {2} OwnerName: {3}  Reason: {4}", entity.EntityId, entity.DisplayName.Replace("\r", "").Replace("\n", ""), ownerId, ownerName, reason));
+				}
 				}
 			//});
 		}
@@ -879,7 +869,7 @@ namespace EssentialsPlugin.EntityManagers
 						Logging.WriteLineAndConsole("Conceal", string.Format("Issue - CreateFromObjectBuilder failed: {0}", newEntity.EntityId));
 						continue;
 					}
-					
+
 					BaseEntityNetworkManager.BroadcastRemoveEntity(entity, false);
 					MyAPIGateway.Entities.AddEntity(newEntity, true);
 					addList.Add(newEntity.GetObjectBuilder());
@@ -893,14 +883,14 @@ namespace EssentialsPlugin.EntityManagers
 
 		public static bool ToggleMedbayGrids(ulong steamId)
 		{
-			if (m_checkConceal || m_checkReveal)
+			if (_checkConceal || _checkReveal)
 			{
 				Communication.SendPrivateInformation(steamId, "Server busy");
 				return false;
 			}
 
-			m_checkConceal = true;
-			m_checkReveal = true;
+			_checkConceal = true;
+			_checkReveal = true;
 			try
 			{
 				DateTime start = DateTime.Now;
@@ -993,8 +983,8 @@ namespace EssentialsPlugin.EntityManagers
 			}
 			finally
 			{
-				m_checkConceal = false;
-				m_checkReveal = false;
+				_checkConceal = false;
+				_checkReveal = false;
 			}
 
 			return true;
@@ -1002,20 +992,20 @@ namespace EssentialsPlugin.EntityManagers
 
 		public static void SetOnline(ulong steamId, bool online)
 		{
-			lock (m_online)
+			lock (Online)
 			{
 				if (online)
 				{
-					if (!m_online.Contains(steamId))
+					if (!Online.Contains(steamId))
 					{
-						m_online.Add(steamId);
+						Online.Add(steamId);
 					}
 				}
 				else
 				{
-					if (m_online.Contains(steamId))
+					if (Online.Contains(steamId))
 					{
-						m_online.Remove(steamId);
+						Online.Remove(steamId);
 					}
 				}
 			}

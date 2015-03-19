@@ -1,21 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using EssentialsPlugin.Utility;
-using Sandbox.ModAPI;
-using SEModAPIInternal.API.Common;
-using SEModAPIInternal.API.Server;
-using System.IO;
-using System.Xml;
-using System.Xml.Serialization;
-using VRage.Common.Utils;
-using System.Text.RegularExpressions;
-using System.Threading;
-using Sandbox.Common.ObjectBuilders;
-
-namespace EssentialsPlugin.ProcessHandler
+﻿namespace EssentialsPlugin.ProcessHandlers
 {
+	using System;
+	using System.Collections.Generic;
+	using EssentialsPlugin.Utility;
+	using Sandbox.Common.ObjectBuilders;
+	using Sandbox.ModAPI;
+	using SEModAPIInternal.API.Server;
+
 	public class ProcessRespawn : ProcessHandlerBase
 	{
 		Dictionary<long, DateTime> m_deathTracker = new Dictionary<long, DateTime>();

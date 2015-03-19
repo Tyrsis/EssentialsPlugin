@@ -1,26 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Threading;
-
-using EssentialsPlugin.Utility;
-
-using Sandbox.ModAPI;
-using Sandbox.Common.ObjectBuilders;
-
-using VRageMath;
-
-using SEModAPIInternal.API.Entity;
-using SEModAPIInternal.API.Entity.Sector.SectorObject;
-using SEModAPIInternal.API.Entity.Sector.SectorObject.CubeGrid;
-using SEModAPIInternal.API.Entity.Sector.SectorObject.CubeGrid.CubeBlock;
-
-using SEModAPIInternal.API.Common;
-
-namespace EssentialsPlugin.ChatHandlers
+﻿namespace EssentialsPlugin.ChatHandlers.AdminDelete
 {
+	using System.Collections.Generic;
+	using System.Linq;
+	using EssentialsPlugin.Utility;
+	using Sandbox.Common.ObjectBuilders;
+	using Sandbox.ModAPI;
+	using SEModAPIInternal.API.Common;
+	using SEModAPIInternal.API.Entity;
+
 	public class HandleAdminDeleteGrids : ChatHandlerBase
 	{
 		public override string GetHelp()
@@ -43,9 +30,9 @@ namespace EssentialsPlugin.ChatHandlers
 		}
 
 		// admin nobeacon scan
-		public override bool HandleCommand(ulong userId, string[] words)
+		public override bool HandleCommand( ulong userId, string command )
 		{
-			HashSet<IMyEntity> grids = CubeGrids.ScanGrids(userId, words);
+			HashSet<IMyEntity> grids = CubeGrids.ScanGrids( userId, command );
 
 			bool confirm = true;
 			/*

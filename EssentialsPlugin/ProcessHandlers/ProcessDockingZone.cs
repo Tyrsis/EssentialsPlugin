@@ -1,32 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using EssentialsPlugin.Utility;
-using Sandbox.ModAPI;
-using SEModAPIInternal.API.Common;
-using System.IO;
-using System.Xml;
-using System.Xml.Serialization;
-using VRage.Common.Utils;
-using System.Text.RegularExpressions;
-using System.Threading;
-
-using SEModAPIInternal.API.Entity.Sector.SectorObject;
-using SEModAPIInternal.API.Entity.Sector.SectorObject.CubeGrid;
-using SEModAPIInternal.API.Entity.Sector.SectorObject.CubeGrid.CubeBlock;
-using SEModAPIInternal.API.Entity;
-
-using EssentialsPlugin.Settings;
-
-using Sandbox.Definitions;
-using Sandbox.Common.ObjectBuilders;
-using Sandbox.Common;
-
-using VRageMath;
-
-namespace EssentialsPlugin.ProcessHandler
+﻿namespace EssentialsPlugin.ProcessHandlers
 {
+	using System;
+	using System.Collections.Generic;
+	using EssentialsPlugin.Utility;
+	using Sandbox.Common;
+	using Sandbox.ModAPI;
+	using SEModAPIInternal.API.Common;
+	using VRageMath;
+
 	public class ProcessDockingZone : ProcessHandlerBase
 	{
 		private DateTime m_lastZoneUpdate;
@@ -35,8 +16,8 @@ namespace EssentialsPlugin.ProcessHandler
 
 		public static HashSet<IMyCubeGrid> ZoneCache
 		{
-			get { return ProcessDockingZone.m_zoneCache; }
-			set { ProcessDockingZone.m_zoneCache = value; }
+			get { return m_zoneCache; }
+			set { m_zoneCache = value; }
 		}
 
 		public ProcessDockingZone()

@@ -1,29 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Threading;
-using System.IO;
-
-using EssentialsPlugin.Utility;
-
-using Sandbox.ModAPI;
-using Sandbox.Common.ObjectBuilders;
-using Sandbox.Common;
-
-using VRageMath;
-
-using SEModAPIInternal.API.Entity;
-using SEModAPIInternal.API.Entity.Sector.SectorObject;
-using SEModAPIInternal.API.Entity.Sector.SectorObject.CubeGrid.CubeBlock;
-using SEModAPIInternal.API.Common;
-
-namespace EssentialsPlugin.ChatHandlers
+﻿namespace EssentialsPlugin.ChatHandlers.Admin
 {
+	using System;
+	using System.Linq;
+	using EssentialsPlugin.Utility;
+	using Sandbox.Common;
+
 	public class HandleAdminNotify : ChatHandlerBase
 	{
-		private Random m_random = new Random();
 		public override string GetHelp()
 		{
 			return "This will broadcast a notification to all users.  Usage: /admin notify <color> <time> <message>";
@@ -45,8 +28,9 @@ namespace EssentialsPlugin.ChatHandlers
 		}
 
 		// admin deletearea x y z radius
-		public override bool HandleCommand(ulong userId, string[] words)
+		public override bool HandleCommand(ulong userId, string command)
 		{
+			string[ ] words = command.Split( ' ' );
 			if (words.Length < 3)
 			{
 				Communication.SendPrivateInformation(userId, GetHelp());

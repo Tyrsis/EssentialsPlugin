@@ -1,26 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Threading;
-
-using EssentialsPlugin.Utility;
-
-using Sandbox.ModAPI;
-using Sandbox.Common.ObjectBuilders;
-
-using VRageMath;
-
-using SEModAPIInternal.API.Entity;
-using SEModAPIInternal.API.Entity.Sector.SectorObject;
-using SEModAPIInternal.API.Entity.Sector.SectorObject.CubeGrid;
-using SEModAPIInternal.API.Entity.Sector.SectorObject.CubeGrid.CubeBlock;
-
-using SEModAPIInternal.API.Common;
-
-namespace EssentialsPlugin.ChatHandlers
+﻿namespace EssentialsPlugin.ChatHandlers.AdminDelete
 {
+	using System.Collections.Generic;
+	using System.Linq;
+	using EssentialsPlugin.Utility;
+	using Sandbox.Common.ObjectBuilders;
+	using Sandbox.ModAPI;
+	using SEModAPIInternal.API.Common;
+	using SEModAPIInternal.API.Entity.Sector.SectorObject;
+
 	public class HandleAdminDeleteCleanup : ChatHandlerBase
 	{
 		public override string GetHelp()
@@ -42,9 +29,10 @@ namespace EssentialsPlugin.ChatHandlers
 			return true;
 		}
 
-		public override bool HandleCommand(ulong userId, string[] words)
+		public override bool HandleCommand( ulong userId, string command )
 		{
-			HashSet<IMyEntity> entitiesFound = CubeGrids.ScanCleanup(userId, words);
+			string[ ] words = command.Split( ' ' );
+			HashSet<IMyEntity> entitiesFound = CubeGrids.ScanCleanup( userId, words );
 
 			foreach (IMyEntity entity in entitiesFound)
 			{

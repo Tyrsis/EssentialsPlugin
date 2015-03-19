@@ -1,16 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Sandbox.ModAPI;
-using SEModAPIInternal.API.Common;
-
-using EssentialsPlugin.Utility;
-using EssentialsPlugin.Settings;
-
-namespace EssentialsPlugin.ProcessHandler
+﻿namespace EssentialsPlugin.ProcessHandlers
 {
+	using System;
+	using System.Collections.Generic;
+	using System.Linq;
+	using EssentialsPlugin.Settings;
+	using EssentialsPlugin.Utility;
+	using Sandbox.ModAPI;
+	using SEModAPIInternal.API.Common;
+
 	class GreetingItem
 	{
 		private DateTime start;
@@ -158,7 +155,7 @@ namespace EssentialsPlugin.ProcessHandler
 			item.SteamId = remoteUserId;
 			item.Timeout = TimeSpan.FromMinutes(10);
 			item.Start = DateTime.Now;
-			item.IsNewUser = PlayerMap.Instance.GetPlayerIdsFromSteamId(remoteUserId).Count() == 0;
+			item.IsNewUser = !PlayerMap.Instance.GetPlayerIdsFromSteamId(remoteUserId).Any();
 
 			Logging.WriteLineAndConsole(string.Format("New User: {0}", remoteUserId));
 

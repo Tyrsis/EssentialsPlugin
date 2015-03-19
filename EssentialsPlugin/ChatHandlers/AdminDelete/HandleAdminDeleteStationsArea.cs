@@ -1,22 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Threading;
-
-using EssentialsPlugin.Utility;
-
-using Sandbox.ModAPI;
-using Sandbox.Common.ObjectBuilders;
-
-using VRageMath;
-
-using SEModAPIInternal.API.Entity;
-using SEModAPIInternal.API.Entity.Sector.SectorObject;
-
-namespace EssentialsPlugin.ChatHandlers
+﻿namespace EssentialsPlugin.ChatHandlers.AdminDelete
 {
+	using System.Linq;
+	using EssentialsPlugin.Utility;
+	using VRageMath;
+
 	public class HandleAdminDeleteStationsArea : ChatHandlerBase
 	{
 		public override string GetHelp()
@@ -40,12 +27,13 @@ namespace EssentialsPlugin.ChatHandlers
 		}
 
 		// admin deletearea x y z radius
-		public override bool HandleCommand(ulong userId, string[] words)
+		public override bool HandleCommand( ulong userId, string command )
 		{
-			if(words.Count() != 4 && words.Count() != 0)
+			string[ ] words = command.Split( ' ' );
+			if ( words.Length != 4 && words.Length != 0 )
 				return false;
 
-			if (words.Count() == 0)
+			if (!words.Any())
 			{
 				Communication.SendPrivateInformation(userId, GetHelp());
 				return true;

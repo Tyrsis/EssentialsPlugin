@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using SEModAPIInternal.API.Common;
-using EssentialsPlugin.Utility;
-using EssentialsPlugin.Settings;
-
-namespace EssentialsPlugin.ProcessHandler
+﻿namespace EssentialsPlugin.ProcessHandlers
 {
+	using System;
+	using System.Linq;
+	using EssentialsPlugin.Settings;
+	using EssentialsPlugin.Utility;
+	using SEModAPIInternal.API.Common;
+
 	class ProcessInfo : ProcessHandlerBase
 	{
 		public override int GetUpdateResolution()

@@ -1,28 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Threading;
-using System.IO;
-
-using EssentialsPlugin.Utility;
-
-using Sandbox.ModAPI;
-using Sandbox.Common.ObjectBuilders;
-
-using VRageMath;
-
-using SEModAPIInternal.API.Entity;
-using SEModAPIInternal.API.Entity.Sector.SectorObject;
-using SEModAPIInternal.API.Entity.Sector.SectorObject.CubeGrid.CubeBlock;
-using SEModAPIInternal.API.Common;
-
-namespace EssentialsPlugin.ChatHandlers
+﻿namespace EssentialsPlugin.ChatHandlers.AdminConceal
 {
+	using System.Collections.Generic;
+	using System.Linq;
+	using EssentialsPlugin.Utility;
+	using Sandbox.Common.ObjectBuilders;
+	using Sandbox.ModAPI;
+	using SEModAPIInternal.API.Common;
+	using SEModAPIInternal.API.Entity;
+
 	public class HandleAdminReveal : ChatHandlerBase
 	{
-		private Random m_random = new Random();
 		public override string GetHelp()
 		{
 			return "This command allows you to reveal concealed grids.  Usage: /admin reveal (force) - This command without 'force' only shows you how many would be revealed.";
@@ -43,17 +30,13 @@ namespace EssentialsPlugin.ChatHandlers
 			return true;
 		}
 
-		public override bool HandleCommand(ulong userId, string[] words)
+		public override bool HandleCommand(ulong userId, string command)
 		{
-			bool force = false;
-			if (words.FirstOrDefault(x => x.ToLower() == "force") != null)
-				force = true;
+			string[ ] words = command.Split( ' ' );
+			bool force = words.FirstOrDefault(x => x.ToLower() == "force") != null;
 
 			HashSet<IMyEntity> entities = new HashSet<IMyEntity>();
-			Wrapper.GameAction(() =>
-			{
-				MyAPIGateway.Entities.GetEntities(entities);
-			});
+			Wrapper.GameAction(() => MyAPIGateway.Entities.GetEntities(entities) );
 
 			List<MyObjectBuilder_EntityBase> addList = new List<MyObjectBuilder_EntityBase>();
 			int count = 0;
@@ -110,10 +93,7 @@ namespace EssentialsPlugin.ChatHandlers
 				}
 			});
 
-			if (!force)
-				Logging.WriteLineAndConsole(string.Format("Command would Reveal {0} grids.  Type /admin reveal force to reveal them.", count));
-			else
-				Logging.WriteLineAndConsole(string.Format("Command Revealed {0} grids", count));
+			Logging.WriteLineAndConsole( !force ? string.Format( "Command would Reveal {0} grids.  Type /admin reveal force to reveal them.", count ) : string.Format( "Command Revealed {0} grids", count ) );
 
 			return true;
 		}

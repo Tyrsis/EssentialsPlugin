@@ -1,30 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Threading;
-using System.IO;
-using System.Reflection;
-
-using EssentialsPlugin.Utility;
-
-using Sandbox.ModAPI;
-using Sandbox.ModAPI.Interfaces;
-using Sandbox.Common.ObjectBuilders;
-
-using VRageMath;
-
-using SEModAPIInternal.API.Entity;
-using SEModAPIInternal.API.Entity.Sector.SectorObject;
-using SEModAPIInternal.API.Entity.Sector.SectorObject.CubeGrid.CubeBlock;
-using SEModAPIInternal.API.Common;
-
-using EssentialsPlugin.ProcessHandler;
-
-
-namespace EssentialsPlugin.EntityManagers
+﻿namespace EssentialsPlugin.EntityManagers
 {
+	using System;
+	using System.Collections.Generic;
+	using System.Linq;
+	using EssentialsPlugin.Utility;
+	using Sandbox.Common;
+	using Sandbox.Common.ObjectBuilders;
+	using Sandbox.ModAPI;
+	using SEModAPIInternal.API.Entity.Sector.SectorObject.CubeGrid.CubeBlock;
+	using VRageMath;
+
 	public class TurretManagement
 	{
 		private static List<IMyEntity> m_scanCache = new List<IMyEntity>();
@@ -336,7 +321,7 @@ namespace EssentialsPlugin.EntityManagers
 					{
 						if (PluginSettings.Instance.DynamicTurretManagementType == DynamicTurretManagementTypes.AllButOwner)
 						{
-							if (block.FatBlock.GetUserRelationToOwner(owner) != Sandbox.Common.MyRelationsBetweenPlayerAndBlock.Owner)
+							if (block.FatBlock.GetUserRelationToOwner(owner) != MyRelationsBetweenPlayerAndBlock.Owner)
 							{
 								//Console.WriteLine("Grid: Not owner");
 								return true;
@@ -345,8 +330,8 @@ namespace EssentialsPlugin.EntityManagers
 
 						if (PluginSettings.Instance.DynamicTurretManagementType == DynamicTurretManagementTypes.NeutralAndEnemy)
 						{
-							if (block.FatBlock.GetUserRelationToOwner(owner) == Sandbox.Common.MyRelationsBetweenPlayerAndBlock.Enemies ||
-								block.FatBlock.GetUserRelationToOwner(owner) == Sandbox.Common.MyRelationsBetweenPlayerAndBlock.Neutral)
+							if (block.FatBlock.GetUserRelationToOwner(owner) == MyRelationsBetweenPlayerAndBlock.Enemies ||
+								block.FatBlock.GetUserRelationToOwner(owner) == MyRelationsBetweenPlayerAndBlock.Neutral)
 							{
 								//Console.WriteLine("Grid: Enemy or Neutral: {0} {1}", owner, grid.DisplayName);
 								return true;
@@ -355,7 +340,7 @@ namespace EssentialsPlugin.EntityManagers
 
 						if (PluginSettings.Instance.DynamicTurretManagementType == DynamicTurretManagementTypes.Enemy)
 						{
-							if (block.FatBlock.GetUserRelationToOwner(owner) == Sandbox.Common.MyRelationsBetweenPlayerAndBlock.Enemies)
+							if (block.FatBlock.GetUserRelationToOwner(owner) == MyRelationsBetweenPlayerAndBlock.Enemies)
 							{
 								//Console.WriteLine("{3} Target: Grid - Enemy: {0} - {1} ({2})", block.FatBlock.OwnerId, owner, testEntity.DisplayName, ((IMyTerminalBlock)block.FatBlock).Parent.DisplayName);
 
@@ -369,7 +354,7 @@ namespace EssentialsPlugin.EntityManagers
 					{
 						if (PluginSettings.Instance.DynamicTurretManagementType == DynamicTurretManagementTypes.AllButOwner)
 						{
-							if (block.FatBlock.GetUserRelationToOwner(owner) != Sandbox.Common.MyRelationsBetweenPlayerAndBlock.Owner)
+							if (block.FatBlock.GetUserRelationToOwner(owner) != MyRelationsBetweenPlayerAndBlock.Owner)
 							{
 								//Console.WriteLine("Grid: Not owner");
 								return true;
@@ -378,8 +363,8 @@ namespace EssentialsPlugin.EntityManagers
 
 						if (PluginSettings.Instance.DynamicTurretManagementType == DynamicTurretManagementTypes.NeutralAndEnemy)
 						{
-							if (block.FatBlock.GetUserRelationToOwner(owner) == Sandbox.Common.MyRelationsBetweenPlayerAndBlock.Enemies ||
-								block.FatBlock.GetUserRelationToOwner(owner) == Sandbox.Common.MyRelationsBetweenPlayerAndBlock.Neutral)
+							if (block.FatBlock.GetUserRelationToOwner(owner) == MyRelationsBetweenPlayerAndBlock.Enemies ||
+								block.FatBlock.GetUserRelationToOwner(owner) == MyRelationsBetweenPlayerAndBlock.Neutral)
 							{
 								//Console.WriteLine("Grid: Enemy or Neutral: {0} {1}", owner, grid.DisplayName);
 								return true;
@@ -388,7 +373,7 @@ namespace EssentialsPlugin.EntityManagers
 
 						if (PluginSettings.Instance.DynamicTurretManagementType == DynamicTurretManagementTypes.Enemy)
 						{
-							if (block.FatBlock.GetUserRelationToOwner(owner) == Sandbox.Common.MyRelationsBetweenPlayerAndBlock.Enemies)
+							if (block.FatBlock.GetUserRelationToOwner(owner) == MyRelationsBetweenPlayerAndBlock.Enemies)
 							{
 								//Console.WriteLine("Grid: Enemy: {0} {1}", owner, grid.DisplayName);
 								return true;
@@ -450,7 +435,7 @@ namespace EssentialsPlugin.EntityManagers
 						if (player != null)
 							playerId = player.PlayerID;
 
-						if (PluginSettings.Instance.DynamicTurretManagementType == DynamicTurretManagementTypes.AllButOwner && block.FatBlock.GetUserRelationToOwner(playerId) != Sandbox.Common.MyRelationsBetweenPlayerAndBlock.Owner)
+						if (PluginSettings.Instance.DynamicTurretManagementType == DynamicTurretManagementTypes.AllButOwner && block.FatBlock.GetUserRelationToOwner(playerId) != MyRelationsBetweenPlayerAndBlock.Owner)
 						{
 							//Console.WriteLine("Character: Not Owner: {0} - {1}", block.FatBlock.OwnerId, playerId);
 							return true;
@@ -458,8 +443,8 @@ namespace EssentialsPlugin.EntityManagers
 
 						if (PluginSettings.Instance.DynamicTurretManagementType == DynamicTurretManagementTypes.NeutralAndEnemy)
 						{
-							if (block.FatBlock.GetUserRelationToOwner(playerId) == Sandbox.Common.MyRelationsBetweenPlayerAndBlock.Enemies ||
-								block.FatBlock.GetUserRelationToOwner(playerId) == Sandbox.Common.MyRelationsBetweenPlayerAndBlock.Neutral)
+							if (block.FatBlock.GetUserRelationToOwner(playerId) == MyRelationsBetweenPlayerAndBlock.Enemies ||
+								block.FatBlock.GetUserRelationToOwner(playerId) == MyRelationsBetweenPlayerAndBlock.Neutral)
 							{
 								//Console.WriteLine("Character: Enemy or Neutral: {0} - {1}", block.FatBlock.OwnerId, playerId);
 								return true;
@@ -468,7 +453,7 @@ namespace EssentialsPlugin.EntityManagers
 
 						if (PluginSettings.Instance.DynamicTurretManagementType == DynamicTurretManagementTypes.Enemy)
 						{
-							if (block.FatBlock.GetUserRelationToOwner(playerId) == Sandbox.Common.MyRelationsBetweenPlayerAndBlock.Enemies)
+							if (block.FatBlock.GetUserRelationToOwner(playerId) == MyRelationsBetweenPlayerAndBlock.Enemies)
 							{
 								//Console.WriteLine("{3} Target: Character - Enemy: {0} - {1} ({2})", block.FatBlock.OwnerId, playerId, testEntity.DisplayName, ((IMyTerminalBlock)block.FatBlock).Parent.DisplayName);
 								return true;

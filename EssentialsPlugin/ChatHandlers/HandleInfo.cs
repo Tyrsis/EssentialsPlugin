@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using EssentialsPlugin.Utility;
 using SEModAPIInternal.API.Common;
 using EssentialsPlugin.Settings;
@@ -31,11 +28,12 @@ namespace EssentialsPlugin.ChatHandlers
 			return true;
 		}
 
-		public override bool HandleCommand(ulong userId, string[] words)
+		public override bool HandleCommand( ulong userId, string command )
 		{
-			if (PluginSettings.Instance.InformationEnabled)
+			string[ ] words = command.Split( ' ' );
+			if ( PluginSettings.Instance.InformationEnabled )
 			{
-				if (words.Count() < 1)
+				if (!words.Any())
 				{
 					ShowTopicList(userId);
 				}

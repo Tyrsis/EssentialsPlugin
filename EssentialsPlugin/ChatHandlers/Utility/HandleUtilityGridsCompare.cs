@@ -1,26 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Threading;
-using System.IO;
-using System.Text.RegularExpressions;
-
 using EssentialsPlugin.Utility;
 
 using Sandbox.ModAPI;
-using Sandbox.Common.ObjectBuilders;
-
-using VRageMath;
-using VRage.Common.Utils;
-
-using SEModAPIInternal.API.Entity;
-using SEModAPIInternal.API.Entity.Sector.SectorObject;
-using SEModAPIInternal.API.Entity.Sector.SectorObject.CubeGrid;
-using SEModAPIInternal.API.Entity.Sector.SectorObject.CubeGrid.CubeBlock;
-
-using SEModAPIInternal.API.Common;
 
 namespace EssentialsPlugin.ChatHandlers
 {
@@ -45,9 +28,9 @@ namespace EssentialsPlugin.ChatHandlers
 			return true;
 		}
 
-		public override bool HandleCommand(ulong userId, string[] words)
+		public override bool HandleCommand( ulong userId, string command )
 		{
-			HashSet<IMyEntity> entities = new HashSet<IMyEntity>();
+			HashSet<IMyEntity> entities = new HashSet<IMyEntity>( );
 			MyAPIGateway.Entities.GetEntities(entities);
 			List<long> entityList = new List<long>();
 

@@ -1,15 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Sandbox.ModAPI;
+﻿using System.Linq;
 using EssentialsPlugin.Utility;
-using VRageMath;
-
-using SEModAPIInternal.API.Entity;
-using SEModAPIInternal.API.Entity.Sector.SectorObject;
-using SEModAPIInternal.API.Entity.Sector.SectorObject.CubeGrid.CubeBlock;
 using SEModAPIInternal.API.Common;
 
 
@@ -42,9 +32,10 @@ namespace EssentialsPlugin.ChatHandlers
 			return true;
 		}
 
-		public override bool HandleCommand(ulong userId, string[] words)
+		public override bool HandleCommand( ulong userId, string command )
 		{
-			if(words.Count() < 2)
+			string[ ] words = command.Split( ' ' );
+			if ( words.Count( ) < 2 )
 			{
 				Communication.SendClientMessage(userId, "/message Server " + GetHelp());
 			}

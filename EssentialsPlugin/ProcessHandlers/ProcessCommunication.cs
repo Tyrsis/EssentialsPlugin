@@ -1,32 +1,27 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using EssentialsPlugin.Utility;
-using Sandbox.ModAPI;
-using Sandbox.Common.ObjectBuilders;
-using VRageMath;
-using SEModAPIInternal.API.Entity;
-using SEModAPIInternal.API.Entity.Sector.SectorObject;
-using System.IO;
-using SEModAPIInternal.API.Common;
-using EssentialsPlugin.ChatHandlers;
-
-namespace EssentialsPlugin.ProcessHandler
+﻿namespace EssentialsPlugin.ProcessHandlers
 {
+	using System;
+	using System.Collections.Generic;
+	using System.IO;
+	using EssentialsPlugin.ChatHandlers;
+	using EssentialsPlugin.Utility;
+	using Sandbox.Common.ObjectBuilders;
+	using Sandbox.ModAPI;
+	using SEModAPIInternal.API.Common;
+	using SEModAPIInternal.API.Entity;
+	using SEModAPIInternal.API.Entity.Sector.SectorObject;
+	using VRageMath;
+
 	public class ProcessCommunication : ProcessHandlerBase
 	{
 		#region Private Fields
 		private HashSet<long> m_processedRelays;
-		private Random m_random;
 		private bool m_init;
 		#endregion
 
 		public ProcessCommunication()
 		{
 			m_processedRelays = new HashSet<long>();
-			m_random = new Random();
 		}
 
 		public override int GetUpdateResolution()
@@ -97,9 +92,9 @@ namespace EssentialsPlugin.ProcessHandler
 			string command = "";
 			foreach(MyObjectBuilder_CubeBlock block in gridBuilder.CubeBlocks)
 			{
-				if(block is MyObjectBuilder_Beacon)
+				MyObjectBuilder_Beacon beacon = block as MyObjectBuilder_Beacon;
+				if(beacon != null)
 				{
-					MyObjectBuilder_Beacon beacon = (MyObjectBuilder_Beacon)block;
 					command = beacon.CustomName;
 					break;
 				}
@@ -208,9 +203,9 @@ namespace EssentialsPlugin.ProcessHandler
 
 			foreach(MyObjectBuilder_CubeBlock block in entity.BaseCubeBlocks)
 			{
-				if (block is MyObjectBuilder_Beacon)
+				MyObjectBuilder_Beacon beacon = block as MyObjectBuilder_Beacon;
+				if (beacon != null)
 				{
-					MyObjectBuilder_Beacon beacon = (MyObjectBuilder_Beacon)block;
 					beacon.CustomName = finalText;
 				}
 			}

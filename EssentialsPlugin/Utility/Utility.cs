@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using System.IO;
 using SEModAPIInternal.Support;
 using VRageMath;
@@ -11,13 +9,15 @@ using VRage.Common.Utils;
 
 namespace EssentialsPlugin.Utility
 {
+	using System.Collections.Generic;
+
 	public static class Logging
 	{
 		private static object m_lockObj = new object();
 		private static StringBuilder m_sb = new StringBuilder();
 		public static void WriteLineAndConsole(string text)
 		{
-			LogManager.APILog.WriteLineAndConsole(text);
+			ApplicationLog.Info(text);
 		}
 
 		public static void WriteLineAndConsole(string name, string text)

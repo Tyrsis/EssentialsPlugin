@@ -1,26 +1,12 @@
-﻿using System;
-using System.IO;
-using System.IO.Compression;
-using System.Collections.Generic;
-
-using Sandbox.Common.ObjectBuilders;
-
-using Sandbox.ModAPI;
-
-using SEModAPIExtensions.API;
-
-using EssentialsPlugin.Settings;
-using EssentialsPlugin.Utility;
-
-using SEModAPIInternal.API.Entity;
-using SEModAPIInternal.API.Entity.Sector.SectorObject;
-using SEModAPIInternal.API.Entity.Sector.SectorObject.CubeGrid;
-using SEModAPIInternal.API.Entity.Sector.SectorObject.CubeGrid.CubeBlock;
-
-using SEModAPIInternal.API.Common;
-
-namespace EssentialsPlugin.ProcessHandler
+﻿namespace EssentialsPlugin.ProcessHandlers
 {
+	using System;
+	using System.Collections.Generic;
+	using EssentialsPlugin.Settings;
+	using EssentialsPlugin.Utility;
+	using Sandbox.ModAPI;
+	using SEModAPIInternal.API.Common;
+
 	class ProcessBlockEnforcement : ProcessHandlerBase
 	{
 

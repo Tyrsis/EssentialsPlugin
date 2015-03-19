@@ -1,26 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Threading;
-using System.IO;
-
-using EssentialsPlugin.Utility;
-
-using Sandbox.ModAPI;
-using Sandbox.ModAPI.Interfaces;
-using Sandbox.Common.ObjectBuilders;
-
-using VRageMath;
-
-using SEModAPIInternal.API.Entity;
-using SEModAPIInternal.API.Entity.Sector.SectorObject;
-using SEModAPIInternal.API.Entity.Sector.SectorObject.CubeGrid.CubeBlock;
-using SEModAPIInternal.API.Common;
-
-namespace EssentialsPlugin.ChatHandlers
+﻿namespace EssentialsPlugin.ChatHandlers.Admin
 {
+	using System;
+	using System.Collections.Generic;
+	using EssentialsPlugin.Utility;
+	using Sandbox.Common.ObjectBuilders;
+	using Sandbox.ModAPI;
+	using Sandbox.ModAPI.Interfaces;
+	using SEModAPIInternal.API.Common;
+	using SEModAPIInternal.API.Entity.Sector.SectorObject.CubeGrid.CubeBlock;
+	using VRageMath;
+
 	public class HandleAdminTurrets : ChatHandlerBase
 	{
 		private Random m_random = new Random();
@@ -45,9 +34,10 @@ namespace EssentialsPlugin.ChatHandlers
 			return true;
 		}
 
-		public override bool HandleCommand(ulong userId, string[] words)
+		public override bool HandleCommand( ulong userId, string command )
 		{
-			string[] splits = General.SplitString(string.Join(" ", words));
+			string[ ] words = command.Split( ' ' );
+			string[ ] splits = General.SplitString( string.Join( " ", words ) );
 			if (splits.Length != 1)
 			{
 				Communication.SendPrivateInformation(userId, GetHelp());
@@ -121,9 +111,9 @@ namespace EssentialsPlugin.ChatHandlers
 								}
 
 
-								if (testEntity is IMyCubeGrid)
+								IMyCubeGrid testGrid = testEntity as IMyCubeGrid;
+								if (testGrid != null)
 								{
-									IMyCubeGrid testGrid = (IMyCubeGrid)testEntity;
 									foreach (long owner in testGrid.BigOwners)
 									{
 										if (block.FatBlock.GetUserRelationToOwner(owner) == Sandbox.Common.MyRelationsBetweenPlayerAndBlock.Enemies ||
@@ -145,9 +135,9 @@ namespace EssentialsPlugin.ChatHandlers
 								else
 								{
 									var builderBase = testEntity.GetObjectBuilder();
-									if (builderBase is MyObjectBuilder_Character)
+									MyObjectBuilder_Character c = builderBase as MyObjectBuilder_Character;
+									if (c != null)
 									{
-										MyObjectBuilder_Character c = (MyObjectBuilder_Character)builderBase;
 										ulong steamId = PlayerMap.Instance.GetSteamId(c.EntityId);
 										if (steamId < 1)
 											continue;
