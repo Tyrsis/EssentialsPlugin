@@ -237,7 +237,7 @@ Timed Cleanup Items Options:
 - ScanCommand - This is the command used to scan / delete when the cleanup occurs.  It is basically an /admin scan grids command like above, but you do not include the /admin scan grids part.  For example: nopower noownership would be the same as /admin scan nopower noownership
 
 ### Triggered Cleanups
-These are cleanups that occur when a certian capacity is met.  So if the ScanCommand returns a certain number of grids that's greater than the capacity set, the cleanup is triggered. 
+These are cleanups that occur when a certain capacity is met.  So if the ScanCommand returns a certain number of grids that's greater than the capacity set, the cleanup is triggered. 
  
 Triggered Cleanup Items Options:
 - Enabled - Enable / Disable this cleanup item
